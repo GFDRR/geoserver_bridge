@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/plugins/geoserver_qgis" >
+        <file>icon.png</file>
+    </qresource>
+</RCC>

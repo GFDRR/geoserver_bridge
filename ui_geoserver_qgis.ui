@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>GeoserverQGIS</class>
+ <widget class="QDialog" name="GeoserverQGIS">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>484</width>
+    <height>107</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>GeoserverQGIS</string>
+  </property>
+  <widget class="QPushButton" name="pbnDownload">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>60</y>
+     <width>161</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Download the layers</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pbnDownloadAdd">
+   <property name="geometry">
+    <rect>
+     <x>220</x>
+     <y>60</y>
+     <width>251</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Download and add to QGIS the layers</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
