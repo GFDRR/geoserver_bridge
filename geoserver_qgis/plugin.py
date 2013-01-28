@@ -1,6 +1,6 @@
 """
 Geoserver Geonode QGIS Bridge
-A QGS plugin to download and upload data, styles metadata to and from GeoServer 
+A QGS plugin to download and upload data, styles metadata to and from GeoServer
 
 This script initializes the plugin, making it known to QGIS.
 
@@ -15,22 +15,27 @@ Contact: vivien.deparday@gmail.com
 """
 
 # Import the PyQt and QGIS libraries
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
+from PyQt4.QtCore import (QObject,
+                          QFileInfo,
+                          QTranslator,
+                          SIGNAL,
+                          QCoreApplication,
+                          QSettings)
+from PyQt4.QtGui import QAction, QIcon
+from geoserver_qgis import resources
 from qgis.core import *
-# Initialize Qt resources from file resources.py
-import resources_rc
+
 # Import the code for the dialog
-from geoserver_qgisdialog import GeoserverQGISDialog
+from download_dialog import DownloadDialog
 
 
-class GeoserverQGIS:
+class Plugin:
 
     def __init__(self, iface):
         # Save reference to the QGIS interface
         self.iface = iface
         # initialize plugin directory
-        self.plugin_dir = QFileInfo(QgsApplication.qgisUserDbFilePath()).path() + "/python/plugins/geoserverqgis"
+        self.plugin_dir = QFileInfo(QgsApplication.qgisUserDbFilePath()).path() + "/python/plugins/geoserver-qgis"
         # initialize locale
         localePath = ""
         locale = QSettings().value("locale/userLocale").toString()[0:2]
@@ -46,13 +51,13 @@ class GeoserverQGIS:
                 QCoreApplication.installTranslator(self.translator)
 
         # Create the dialog (after translation) and keep reference
-        self.dlg = GeoserverQGISDialog(iface)
+        self.dlg = DownloadDialog(iface)
 
     def initGui(self):
         # Create action that will start plugin configuration
         self.action = QAction(
-            QIcon(":/plugins/geoserver_qgis/icon.png"),
-            u"Geoserver-QGIS", self.iface.mainWindow())
+            QIcon(":/plugins/geoserver-qgis/icon.png"),
+            u"Geoserver QGIS Bridge", self.iface.mainWindow())
         # connect the action to the run method
         QObject.connect(self.action, SIGNAL("triggered()"), self.run)
 
@@ -76,4 +81,3 @@ class GeoserverQGIS:
             # do something useful (delete the line containing pass and
             # substitute with your code)
             pass
-

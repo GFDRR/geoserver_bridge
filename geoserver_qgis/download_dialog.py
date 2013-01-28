@@ -1,6 +1,6 @@
 """
 Geoserver Geonode QGIS Bridge
-A QGS plugin to download and upload data, styles metadata to and from GeoServer 
+A QGS plugin to download and upload data, styles metadata to and from GeoServer
 
 Contact: vivien.deparday@gmail.com
 
@@ -12,16 +12,16 @@ Contact: vivien.deparday@gmail.com
 """
 
 from PyQt4 import QtCore, QtGui
-from ui_geoserver_qgis import Ui_GeoserverQGIS
+from download_dialog_ui import Ui_DownloadDialog
 
 from storage.qgscatalog import QGSCatalog
 
 
-class GeoserverQGISDialog(QtGui.QDialog):
+class DownloadDialog(QtGui.QDialog):
     def __init__(self, iface):
         QtGui.QDialog.__init__(self)
         # Set up the user interface from Designer.
-        self.ui = Ui_GeoserverQGIS()
+        self.ui = Ui_DownloadDialog()
         self.ui.setupUi(self)
 
         self.iface = iface
@@ -35,16 +35,14 @@ class GeoserverQGISDialog(QtGui.QDialog):
                                self.downloadAddLayers)
 
     def downloadLayers():
-        qgs_cat = QGSCatalog("http://localhost:8080/geoserver/rest",username="admin",password="geoserver")
+        qgs_cat = QGSCatalog("http://localhost:8080/geoserver/rest", username="admin", password="geoserver")
         all_layers = qgs_cat.get_layers()
         all_layers['poi'].download()
 
-
     def downloadAddLayers(self):
-        qgs_cat = QGSCatalog("http://localhost:8080/geoserver/rest",username="admin",password="geoserver")
+        qgs_cat = QGSCatalog("http://localhost:8080/geoserver/rest", username="admin", password="geoserver")
         all_layers = qgs_cat.get_layers()
         poi = all_layers['poi']
         file_paths = poi.download()
         self.iface.addVectorLayer(file_paths['data'], poi.name, "ogr")
         # qgis.utils.iface.addRasterLayer(layer.file_paths['data'], "raster")
-
