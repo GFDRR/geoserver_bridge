@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/plugins/geoserver-qgis" >
+    <qresource prefix="/plugins/geoserver_bridge" >
         <file alias="icon.png">resources/icon.png</file>
     </qresource>
 </RCC>
