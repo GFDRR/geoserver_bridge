@@ -42,7 +42,12 @@ class DownloadDialog(QtGui.QDialog):
     def downloadAddLayers(self):
         qgs_cat = QGSCatalog("http://localhost:8080/geoserver/rest", username="admin", password="geoserver")
         all_layers = qgs_cat.get_layers()
-        poi = all_layers['poi']
-        file_paths = poi.download()
-        self.iface.addVectorLayer(file_paths['data'], poi.name, "ogr")
-        # qgis.utils.iface.addRasterLayer(layer.file_paths['data'], "raster")
+
+        selected_layer = all_layers['sfdem']
+        file_paths = selected_layer.download()
+        layer_type = selected_layer.resource.resource_type
+
+        if layer_type == "featureType":
+            self.iface.addVectorLayer(file_paths['data'], selected_layer.name, "ogr")
+        elif layer_type == "coverage":
+            self.iface.addRasterLayer(file_paths['data'], "raster")

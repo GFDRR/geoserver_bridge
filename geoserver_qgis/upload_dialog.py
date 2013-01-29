@@ -42,7 +42,7 @@ class UploadDialog(QtGui.QDialog):
 
         upload_layer_to_gs(qgs_cat, layer_name, str(file_path.absoluteFilePath()))
 
-    def listLayers(self):
+    def listWorkspaceLayers(self):
         canvas = self.iface.mapCanvas()
         allLayers = canvas.layers()
         return allLayers
