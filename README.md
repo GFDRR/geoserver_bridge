@@ -5,7 +5,7 @@ GeoServer - QGIS bridge
 
 For developers
 --------------
-	git clone https://github.com/GFDRR/geoserver-qgis.git
+	git clone https://github.com/GFDRR/geoserver_bridge.git
 
 	#Install the dependency
 	sudo pip install gsconfig

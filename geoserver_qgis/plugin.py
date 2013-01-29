@@ -27,6 +27,7 @@ from qgis.core import *
 
 # Import the code for the dialog
 from download_dialog import DownloadDialog
+from upload_dialog import UploadDialog
 
 
 class Plugin:
@@ -50,34 +51,45 @@ class Plugin:
             if qVersion() > '4.3.3':
                 QCoreApplication.installTranslator(self.translator)
 
-        # Create the dialog (after translation) and keep reference
-        self.dlg = DownloadDialog(iface)
-
     def initGui(self):
-        # Create action that will start plugin configuration
-        self.action = QAction(
+        #------------------------------------
+        # Create action for Download dialog
+        #------------------------------------
+        self.actionDownloadDialog = QAction(
             QIcon(":/plugins/geoserver_bridge/icon.png"),
-            u"Geoserver QGIS Bridge", self.iface.mainWindow())
-        # connect the action to the run method
-        QObject.connect(self.action, SIGNAL("triggered()"), self.run)
+            u"Geoserver Bridge Download", self.iface.mainWindow())
+
+        QObject.connect(self.actionDownloadDialog, SIGNAL("triggered()"), self.showDownloadDialog)
 
         # Add toolbar button and menu item
-        self.iface.addToolBarIcon(self.action)
-        self.iface.addPluginToMenu(u"&Geoserver QGIS Bridge", self.action)
+        self.iface.addToolBarIcon(self.actionDownloadDialog)
+        self.iface.addPluginToMenu(u"&Geoserver QGIS Bridge", self.actionDownloadDialog)
+
+        #------------------------------------
+        # Create action for Upload dialog
+        #------------------------------------
+        self.actionUploadDialog = QAction(
+            QIcon(":/plugins/geoserver_bridge/icon.png"),
+            u"Geoserver Bridge Upload", self.iface.mainWindow())
+
+        QObject.connect(self.actionUploadDialog, SIGNAL("triggered()"), self.showUploadDialog)
+
+        self.iface.addToolBarIcon(self.actionUploadDialog)
+        self.iface.addPluginToMenu(u"&Geoserver QGIS Bridge", self.actionUploadDialog)
 
     def unload(self):
         # Remove the plugin menu item and icon
-        self.iface.removePluginMenu(u"&Geoserver QGIS Bridge", self.action)
-        self.iface.removeToolBarIcon(self.action)
+        self.iface.removePluginMenu(u"&Geoserver QGIS Bridge", self.actionDownloadDialog)
+        self.iface.removePluginMenu(u"&Geoserver QGIS Bridge", self.actionUploadDialog)
+        self.iface.removeToolBarIcon(self.actionDownloadDialog)
+        self.iface.removeToolBarIcon(self.actionUploadDialog)
 
-    # run method that performs all the real work
-    def run(self):
+    def showDownloadDialog(self):
+        self.download_dialog = DownloadDialog(self.iface)
         # show the dialog
-        self.dlg.show()
-        # Run the dialog event loop
-        result = self.dlg.exec_()
-        # See if OK was pressed
-        if result == 1:
-            # do something useful (delete the line containing pass and
-            # substitute with your code)
-            pass
+        self.download_dialog.show()
+
+    def showUploadDialog(self):
+        self.upload_dialog = UploadDialog(self.iface)
+        # show the dialog
+        self.upload_dialog.show()
