@@ -6,39 +6,32 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>487</width>
-    <height>99</height>
+    <width>591</width>
+    <height>273</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>GeoserverQGIS</string>
+   <string>GeoServer Bridge - Download layers</string>
   </property>
-  <widget class="QPushButton" name="pbnDownload">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>40</y>
-     <width>161</width>
-     <height>26</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Download the layers</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="pbnDownloadAdd">
-   <property name="geometry">
-    <rect>
-     <x>220</x>
-     <y>40</y>
-     <width>251</width>
-     <height>26</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Download and add to QGIS the layers</string>
-   </property>
-  </widget>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="2" column="0">
+    <widget class="QPushButton" name="pbnDownload">
+     <property name="text">
+      <string>Download the selected layers</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QPushButton" name="pbnDownloadAdd">
+     <property name="text">
+      <string>Download and add the selected layers to QGIS </string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0" colspan="2">
+    <widget class="QTableView" name="layerTreeView"/>
+   </item>
+  </layout>
  </widget>
  <resources/>
  <connections/>

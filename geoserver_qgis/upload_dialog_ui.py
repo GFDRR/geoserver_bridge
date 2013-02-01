@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'upload_dialog_ui.ui'
 #
-# Created: Mon Jan 28 20:04:04 2013
+# Created: Thu Jan 31 13:54:26 2013
 #      by: PyQt4 UI code generator 4.9.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -26,6 +26,6 @@ class Ui_UploadDialog(object):
         QtCore.QMetaObject.connectSlotsByName(UploadDialog)
 
     def retranslateUi(self, UploadDialog):
-        UploadDialog.setWindowTitle(QtGui.QApplication.translate("UploadDialog", "Dialog", None, QtGui.QApplication.UnicodeUTF8))
+        UploadDialog.setWindowTitle(QtGui.QApplication.translate("UploadDialog", "GeoServer Bridge - Upload layers", None, QtGui.QApplication.UnicodeUTF8))
         self.pbnUpload.setText(QtGui.QApplication.translate("UploadDialog", "Upload the active layer to GeoServer", None, QtGui.QApplication.UnicodeUTF8))
 

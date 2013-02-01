@@ -27,10 +27,12 @@ class QGSLayer(Layer):
     Could be added in gsconfig.py later on"""
     def __init__(self, catalog, name):
         super(QGSLayer, self).__init__(catalog, name)
+        self.workspace = self.resource.workspace.name
         self.typename = "%s:%s" % (self.resource.workspace.name, self.resource.name)
         self.title = self.resource.title
         self.abstract = self.resource.abstract
         self.keywords = self.resource.keywords
+        self.file_paths = {'data': None, 'metadata': None, 'style': None}
         #should be added to the Catalog class
         #self.gs_base_url = self.catalog.service_url.rstrip("rest")
 
@@ -82,7 +84,7 @@ class QGSLayer(Layer):
         elif self.resource.resource_type == "coverage":
             try:
                 client = httplib2.Http()
-                description_url = self.gs_base_url + "wcs?" + urllib.urlencode({
+                description_url = self.catalog.gs_base_url + "wcs?" + urllib.urlencode({
                         "service": "WCS",
                         "version": "1.0.0",
                         "request": "DescribeCoverage",
@@ -114,7 +116,7 @@ class QGSLayer(Layer):
 
             except Exception as e:
                 print 'Something is wrong with the WCS:', e
-                links['tiff'] = {'extension': "tiff", 'name': "No Tiff", 'url': "#"}
+                links['tiff'] = {'extension': "tiff", 'name': "No Tiff", 'url': str(e)}
 
         def wms_link(mime):
             return self.catalog.gs_base_url + "wms?" + urllib.urlencode({
@@ -159,8 +161,7 @@ class QGSLayer(Layer):
     download_links = property(_get_download_links)
 
     def download(self, dest_dir='downloaded_data'):
-        #Dictionnary to store the path of the file downloaded
-        file_paths = {'data': None, 'metadata': None, 'style': None}
+
 
         links = self.download_links
 
@@ -198,41 +199,43 @@ class QGSLayer(Layer):
                 #log.error(msg)
                 raise RuntimeError(msg)
 
-            filename = self.name
-
+            layer_name = self.name
             output_dir = os.path.abspath(dest_dir)
+
             log.info('Getting data from "%s" into "%s"' % (url, output_dir))
 
             # Create output directory if it does not exist
             if not os.path.isdir(output_dir):
                 os.makedirs(dest_dir)
 
-            layer_filename = os.path.join(dest_dir, filename)
-            base_filename, extension = os.path.splitext(layer_filename)
-            with open(layer_filename, 'wb') as layer_file:
+            extension = links[download_format]['extension']
+            layer_filename = layer_name + '.' + extension
+            layer_path = os.path.join(dest_dir, layer_filename)
+            base_filename, _ = os.path.splitext(layer_path)
+            with open(layer_path, 'wb') as layer_file:
                 layer_file.write(content)
-                if extension == '.tiff':
-                    self.layer_paths['data'] = os.path.abspath(layer_filename)
+                #TODO: manager other type of files
+                if extension == 'tiff':
+                    self.file_paths['data'] = os.path.abspath(layer_path)
                 log.debug('Saved data from "%s" as "%s"' % (self.name, layer_filename))
 
         # If this file a zipfile, unpack all files with the same base_filename
         # and remove the downloaded zip
-        if zipfile.is_zipfile(layer_filename):
+        if zipfile.is_zipfile(layer_path):
             log.debug('Layer "%s" is zipped, unpacking now' % layer_filename)
             # Create a ZipFile object
-            z = zipfile.ZipFile(layer_filename)
+            z = zipfile.ZipFile(layer_path)
             for f in z.namelist():
-                log.debug('Found "%s" in "%s"' % (f, layer_filename))
-                _, extension = os.path.splitext(f)
-                filename = base_filename + extension
-                log.debug('Saving "%s" to "%s"' % (f, filename))
+                _, zip_extension = os.path.splitext(f)
+                zip_filepath = base_filename + zip_extension
+                log.debug('Saving "%s" to "%s"' % (f, zip_filepath))
                 z.extract(f, dest_dir)
-                os.rename(os.path.join(dest_dir, f), filename)
+                #os.rename(os.path.join(dest_dir, f), zip_filepath)
                 #FIXME(Viv): Needs to be more flexible to take into account different file formats
-                if extension == '.shp':
-                    file_paths['data'] = os.path.abspath(filename)
-            log.debug('Removing "%s" because it is not needed anymore' % layer_filename)
-            os.remove(layer_filename)
+                if zip_extension == '.shp':
+                    self.file_paths['data'] = os.path.abspath(zip_filepath)
+            log.debug('Removing "%s" because it is not needed anymore' % layer_path)
+            os.remove(layer_path)
 
         #metadata_link = links['xml']['url']
         if self.resource.metadata_links:
@@ -262,7 +265,7 @@ class QGSLayer(Layer):
 
                 with open(metadata_filename, 'wb') as metadata_file:
                     metadata_file.write(raw_xml)
-                    file_paths['metadata'] = os.path.abspath(metadata_filename)
+                    self.file_paths['metadata'] = os.path.abspath(metadata_filename)
                     log.debug('Saved metadata from "%s" as "%s"' % (self.name, metadata_filename))
 
         #style_link = links['sld']['url']
@@ -281,7 +284,7 @@ class QGSLayer(Layer):
 
             with open(style_filename, 'wb') as style_file:
                 style_file.write(pretty_style_data)
-                file_paths['style'] = os.path.abspath(style_filename)
+                self.file_paths['style'] = os.path.abspath(style_filename)
                 log.debug('Saved style from "%s" as "%s"' % (self.name, style_filename))
 
-        return file_paths
+        return self.file_paths
