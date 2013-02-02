@@ -42,12 +42,15 @@ class DownloadDialog(QtGui.QDialog):
 
         self.tableView = self.ui.layerTreeView
         self.tableView.setModel(self.model)
+        self.resizeColumns()
+        self.tableView.setSortingEnabled(True)
         #header = self.tableView.horizontalHeader()
-        #self.connect(header, SIGNAL("sectionClicked(int)"),
-        #                 self.sortTable)
+        #self.connect(header, QtCore.SIGNAL("sectionClicked(int)"),
+        #                 self.tableView.sort)
 
-    def sortTable(self, section):
-        pass
+    def resizeColumns(self):
+        for column in range(3):
+            self.tableView.resizeColumnToContents(column)
 
     def downloadLayers(self):
         downloaded_layers = []
