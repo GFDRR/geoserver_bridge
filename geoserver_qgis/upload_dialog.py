@@ -18,6 +18,10 @@ from upload_dialog_ui import Ui_UploadDialog
 from storage.qgscatalog import QGSCatalog
 from storage.utilities import upload_layer_to_gs
 
+from projectlayermodel import ProjectLayerModel
+
+import pdb
+
 
 class UploadDialog(QtGui.QDialog):
     def __init__(self, iface):
@@ -30,19 +34,49 @@ class UploadDialog(QtGui.QDialog):
 
         myButton = self.ui.pbnUpload
         QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
-                               self.uploadActiveLayer)
+                               self.uploadSelectedLayer)
 
-    def uploadActiveLayer(self):
+        #Set up the table view
+        layer_list = self.projectLayers()
+        self.model = ProjectLayerModel(layer_list)
+
+        self.tableView = self.ui.layerTableView
+        self.tableView.setModel(self.model)
+        self.resizeColumns()
+        self.tableView.setSortingEnabled(True)
+
+    def resizeColumns(self):
+        for column in range(3):
+            self.tableView.resizeColumnToContents(column)
+
+    def uploadSelectedLayer(self):
+        uploaded_layers = []
         qgs_cat = QGSCatalog("http://localhost:8080/geoserver/rest", username="admin", password="geoserver")
 
-        canvas = self.iface.mapCanvas()
-        cLayer = canvas.currentLayer()
-        file_path = QtCore.QFileInfo(cLayer.dataProvider().dataSourceUri().section('|', 0, 0))
-        layer_name = str(file_path.baseName())
+        selected_indexes = self.tableView.selectionModel().selection().indexes()
 
-        upload_layer_to_gs(qgs_cat, layer_name, str(file_path.absoluteFilePath()))
+        for index in selected_indexes:
+            if index.column() != ProjectLayerModel.NAME:
+                continue
+            selected_layer_name = str(index.data().toString())
+            #Shouldn't require a loop but I didn't find a way to access directly a layer by id or by name
+            for lyr in self.iface.mapCanvas().layers():
+                if str(lyr.name()) == selected_layer_name:
+                    file_path = QtCore.QFileInfo(lyr.dataProvider().dataSourceUri().section('|', 0, 0))
+                    #TODO: support sources of data (PostGIS...) by writing the data file first
+                    upload_layer_to_gs(qgs_cat, selected_layer_name, str(file_path.absoluteFilePath()))
+        return uploaded_layers
 
-    def listWorkspaceLayers(self):
+    def projectLayers(self):
         canvas = self.iface.mapCanvas()
-        allLayers = canvas.layers()
-        return allLayers
+        all_layers = canvas.layers()
+        layer_list = []
+        for lyr in all_layers:
+            layer_list.append({
+                'workspace': '',
+                'name': str(lyr.name()),
+                'title': '',
+                'abstract': '',
+                'keywords': ''
+            })
+        return layer_list

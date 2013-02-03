@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'download_dialog_ui.ui'
 #
-# Created: Thu Jan 31 14:01:08 2013
+# Created: Sat Feb  2 01:15:49 2013
 #      by: PyQt4 UI code generator 4.9.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -17,7 +17,7 @@ except AttributeError:
 class Ui_DownloadDialog(object):
     def setupUi(self, DownloadDialog):
         DownloadDialog.setObjectName(_fromUtf8("DownloadDialog"))
-        DownloadDialog.resize(591, 273)
+        DownloadDialog.resize(708, 338)
         self.gridLayout = QtGui.QGridLayout(DownloadDialog)
         self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
         self.pbnDownload = QtGui.QPushButton(DownloadDialog)
@@ -35,6 +35,6 @@ class Ui_DownloadDialog(object):
 
     def retranslateUi(self, DownloadDialog):
         DownloadDialog.setWindowTitle(QtGui.QApplication.translate("DownloadDialog", "GeoServer Bridge - Download layers", None, QtGui.QApplication.UnicodeUTF8))
-        self.pbnDownload.setText(QtGui.QApplication.translate("DownloadDialog", "Download the layers", None, QtGui.QApplication.UnicodeUTF8))
-        self.pbnDownloadAdd.setText(QtGui.QApplication.translate("DownloadDialog", "Download and add to QGIS the layers", None, QtGui.QApplication.UnicodeUTF8))
+        self.pbnDownload.setText(QtGui.QApplication.translate("DownloadDialog", "Download the selected layers", None, QtGui.QApplication.UnicodeUTF8))
+        self.pbnDownloadAdd.setText(QtGui.QApplication.translate("DownloadDialog", "Download and add the selected layers to QGIS ", None, QtGui.QApplication.UnicodeUTF8))
 

@@ -29,13 +29,14 @@ class DownloadDialog(QtGui.QDialog):
 
         myButton = self.ui.pbnDownload
         QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
-                               self.downloadLayers)
+                               self.downloadSelectedLayers)
 
         myButton = self.ui.pbnDownloadAdd
         QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
                                self.downloadAddLayers)
 
-        #Set up the tree view
+        #Set up the table view
+        #TODO: use a tree view that is folded on the workspace names
         qgs_cat = QGSCatalog("http://localhost:8080/geoserver/rest", username="admin", password="geoserver")
         self.all_layers = qgs_cat.get_layers()
         self.model = QGSLayerModel(self.all_layers)
@@ -44,15 +45,12 @@ class DownloadDialog(QtGui.QDialog):
         self.tableView.setModel(self.model)
         self.resizeColumns()
         self.tableView.setSortingEnabled(True)
-        #header = self.tableView.horizontalHeader()
-        #self.connect(header, QtCore.SIGNAL("sectionClicked(int)"),
-        #                 self.tableView.sort)
 
     def resizeColumns(self):
         for column in range(3):
             self.tableView.resizeColumnToContents(column)
 
-    def downloadLayers(self):
+    def downloadSelectedLayers(self):
         downloaded_layers = []
         selected_indexes = self.tableView.selectionModel().selection().indexes()
         for index in selected_indexes:
@@ -73,5 +71,5 @@ class DownloadDialog(QtGui.QDialog):
                 self.iface.addRasterLayer(layer.file_paths['data'], "raster")
 
     def downloadAddLayers(self):
-        downloaded_layers = self.downloadLayers()
+        downloaded_layers = self.downloadSelectedLayers()
         self.AddLayers(downloaded_layers)
