@@ -10,7 +10,7 @@
 
 [general]
 name=Geoserver QGIS Bridge
-qgisMinimumVersion=1.9
+qgisMinimumVersion=1.8
 description=A plugin to download and upload data, styles to and from GeoServer 
 version=0.1
 author=Global Facility for Disaster Reduction

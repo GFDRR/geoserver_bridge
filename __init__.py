@@ -42,7 +42,7 @@ def version():
 
 def qgisMinimumVersion():
     """Minimum version of QGIS needed to run this plugin."""
-    return "1.9"
+    return "1.8"
 
 
 def icon():
