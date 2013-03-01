@@ -31,7 +31,7 @@ class QGSLayer(Layer):
         self.typename = "%s:%s" % (self.resource.workspace.name, self.resource.name)
         self.title = self.resource.title
         self.abstract = self.resource.abstract
-        self.keywords = self.resource.keywords
+        self.keywords = self.resource.keywords or []
         self.file_paths = {'data': None, 'metadata': None, 'style': None}
         #should be added to the Catalog class
         #self.gs_base_url = self.catalog.service_url.rstrip("rest")

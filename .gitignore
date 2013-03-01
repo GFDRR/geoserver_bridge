@@ -1,3 +1,6 @@
+downloaded_data
+.ropeproject
+
 *.py[co]
 
 # Packages
@@ -19,7 +22,6 @@ pip-log.txt
 # Unit test / coverage reports
 .coverage
 .tox
-downloaded_data
 
 #Translations
 *.mo

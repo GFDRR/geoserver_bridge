@@ -1,5 +1,6 @@
 from geoserver.catalog import Catalog
 from geoserver.support import url
+from geoserver.layer import Layer
 from qgslayer import QGSLayer
 
 #TODO: here or in gsconfig.py, we should catch the socket.error exception when the url is not accessible

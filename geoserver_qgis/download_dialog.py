@@ -27,6 +27,24 @@ class DownloadDialog(QtGui.QDialog):
 
         self.iface = iface
 
+        #Set up the server connection parameter text boxes.
+        self.txtServerUrl = self.ui.leServerUrl
+        self.txtServerUrl.setText("http://localhost/geoserver/rest")
+        self.txtUsername = self.ui.leUsername
+        self.txtUsername.setText("admin")
+        self.txtPassword = self.ui.lePassword
+        self.txtPassword.setText("geoserver")    
+        self.txtPassword.setEchoMode(QtGui.QLineEdit.Password)   
+
+        myButton = self.ui.pbnConnect
+        QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
+                               self.populateTableView)
+
+        #Set up the table view
+        #TODO: use a tree view that is folded on the workspace names
+        self.tableView = self.ui.layerTreeView
+
+        #Set up the button
         myButton = self.ui.pbnDownload
         QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
                                self.downloadSelectedLayers)
@@ -35,20 +53,22 @@ class DownloadDialog(QtGui.QDialog):
         QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
                                self.downloadAddLayers)
 
-        #Set up the table view
-        #TODO: use a tree view that is folded on the workspace names
-        qgs_cat = QGSCatalog("http://localhost:8080/geoserver/rest", username="admin", password="geoserver")
-        self.all_layers = qgs_cat.get_layers()
-        self.model = QGSLayerModel(self.all_layers)
-
-        self.tableView = self.ui.layerTreeView
-        self.tableView.setModel(self.model)
-        self.resizeColumns()
-        self.tableView.setSortingEnabled(True)
-
     def resizeColumns(self):
         for column in range(3):
             self.tableView.resizeColumnToContents(column)
+
+    def populateTableView(self):
+        serverUrl = unicode(self.txtServerUrl.text())
+        username = unicode(self.txtUsername.text())
+        password = unicode(self.txtPassword.text())
+
+        qgs_cat = QGSCatalog(serverUrl, username=username, password=password)
+        self.all_layers = qgs_cat.get_layers()
+        self.model = QGSLayerModel(self.all_layers)
+
+        self.tableView.setModel(self.model)
+        self.resizeColumns()
+        self.tableView.setSortingEnabled(True)
 
     def downloadSelectedLayers(self):
         downloaded_layers = []
@@ -56,7 +76,7 @@ class DownloadDialog(QtGui.QDialog):
         for index in selected_indexes:
             if index.column() != QGSLayerModel.NAME:
                 continue
-            selected_layer_name = str(index.data().toString())
+            selected_layer_name = unicode(index.data().toString())
             selected_layer = self.all_layers[selected_layer_name]
             selected_layer.download()
             downloaded_layers.append(selected_layer)
