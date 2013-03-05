@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'download_dialog_ui.ui'
 #
-# Created: Wed Feb 27 16:49:54 2013
+# Created: Mon Mar  4 18:25:03 2013
 #      by: PyQt4 UI code generator 4.9.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -17,7 +17,7 @@ except AttributeError:
 class Ui_DownloadDialog(object):
     def setupUi(self, DownloadDialog):
         DownloadDialog.setObjectName(_fromUtf8("DownloadDialog"))
-        DownloadDialog.resize(771, 388)
+        DownloadDialog.resize(771, 537)
         self.gridLayout_2 = QtGui.QGridLayout(DownloadDialog)
         self.gridLayout_2.setObjectName(_fromUtf8("gridLayout_2"))
         self.horizontalLayout_4 = QtGui.QHBoxLayout()

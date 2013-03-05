@@ -25,13 +25,19 @@ log.addHandler(NullHandler())
 class QGSLayer(Layer):
     """Class to add some handy attributes and methods the gs_config layer.
     Could be added in gsconfig.py later on"""
-    def __init__(self, catalog, name):
+    def __init__(self, catalog, name, workspace, title, abstract, keywords):
         super(QGSLayer, self).__init__(catalog, name)
-        self.workspace = self.resource.workspace.name
-        self.typename = "%s:%s" % (self.resource.workspace.name, self.resource.name)
-        self.title = self.resource.title
-        self.abstract = self.resource.abstract
-        self.keywords = self.resource.keywords or []
+        # self.workspace = self.resource.workspace.name
+        # self.typename = "%s:%s" % (self.resource.workspace.name, self.resource.name)
+        # self.title = self.resource.title
+        # self.abstract = self.resource.abstract
+        # self.keywords = self.resource.keywords or []
+        self.workspace = workspace
+        self.typename = "%s:%s" % (workspace, name)
+        self.title = title
+        self.abstract = abstract
+        self.keywords = keywords
+
         self.file_paths = {'data': None, 'metadata': None, 'style': None}
         #should be added to the Catalog class
         #self.gs_base_url = self.catalog.service_url.rstrip("rest")
@@ -162,7 +168,6 @@ class QGSLayer(Layer):
 
     def download(self, dest_dir='downloaded_data'):
 
-
         links = self.download_links
 
         # Find out the appropiate download format for this layer
@@ -195,7 +200,7 @@ class QGSLayer(Layer):
 
             if 'content-disposition' not in r.headers:
                 msg = ('Layer "%s" did not have a valid download link "%s"' %
-                        (self.name, download_link))
+                       (self.name, download_link))
                 #log.error(msg)
                 raise RuntimeError(msg)
 

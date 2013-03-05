@@ -2,7 +2,6 @@ from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 
 from operator import itemgetter
-import pdb
 
 
 class ProjectLayerModel(QAbstractTableModel):
@@ -12,21 +11,19 @@ class ProjectLayerModel(QAbstractTableModel):
 
     def __init__(self, projectLayers):
         super(ProjectLayerModel, self).__init__()
-        #pyqtRemoveInputHook()
-        #pdb.set_trace()
         self.layer_list = []
         for lyr in projectLayers:
             self.layer_list.append([
-                                lyr["workspace"],
-                                lyr["name"],
-                                lyr["title"],
-                                lyr["abstract"],
-                                lyr["keywords"]
+                lyr["workspace"],
+                lyr["name"],
+                lyr["title"],
+                lyr["abstract"],
+                lyr["keywords"]
             ])
 
     def sort(self, column, order):
         self.layer_list = sorted(self.layer_list,
-                                key=itemgetter(column))
+                                 key=itemgetter(column))
         if order == Qt.DescendingOrder:
             self.layer_list.reverse()
         self.reset()

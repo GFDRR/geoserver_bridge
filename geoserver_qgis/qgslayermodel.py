@@ -6,19 +6,22 @@ from operator import attrgetter, itemgetter
 
 class QGSLayerModel(QAbstractTableModel):
 
-    header_data = ["Workspace", "Name", "Title", "Abstract", "Keywords"]
+    header_data = ["Workspace", "Name", "Title", "Keywords", "Abstract"]
     NAME = 1
 
     def __init__(self, qgslayers):
         super(QGSLayerModel, self).__init__()
         self.layer_list = []
         for lyr in qgslayers.values():
+            keywords = ";".join(lyr.keywords) if lyr.keywords is not None else []
             self.layer_list.append([lyr.workspace, lyr.name, lyr.title,
-                                lyr.abstract, "; ".join(lyr.keywords)])
+                                    keywords, lyr.abstract])
 
     def sort(self, column, order):
+        # pyqtRemoveInputHook()
+        # import pdb; pdb.set_trace()
         self.layer_list = sorted(self.layer_list,
-                                key=itemgetter(column))
+                                 key=itemgetter(column))
         if order == Qt.DescendingOrder:
             self.layer_list.reverse()
         self.reset()

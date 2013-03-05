@@ -12,6 +12,7 @@ Contact: vivien.deparday@gmail.com
 """
 
 from PyQt4 import QtCore, QtGui
+from PyQt4 import Qt
 from download_dialog_ui import Ui_DownloadDialog
 
 from storage.qgscatalog import QGSCatalog
@@ -29,12 +30,12 @@ class DownloadDialog(QtGui.QDialog):
 
         #Set up the server connection parameter text boxes.
         self.txtServerUrl = self.ui.leServerUrl
-        self.txtServerUrl.setText("http://localhost/geoserver/rest")
+        self.txtServerUrl.setText("http://localhost:8080/geoserver/rest")
         self.txtUsername = self.ui.leUsername
         self.txtUsername.setText("admin")
         self.txtPassword = self.ui.lePassword
-        self.txtPassword.setText("geoserver")    
-        self.txtPassword.setEchoMode(QtGui.QLineEdit.Password)   
+        self.txtPassword.setText("geoserver")
+        self.txtPassword.setEchoMode(QtGui.QLineEdit.Password)
 
         myButton = self.ui.pbnConnect
         QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
@@ -54,7 +55,7 @@ class DownloadDialog(QtGui.QDialog):
                                self.downloadAddLayers)
 
     def resizeColumns(self):
-        for column in range(3):
+        for column in range(4):
             self.tableView.resizeColumnToContents(column)
 
     def populateTableView(self):
@@ -63,16 +64,37 @@ class DownloadDialog(QtGui.QDialog):
         password = unicode(self.txtPassword.text())
 
         qgs_cat = QGSCatalog(serverUrl, username=username, password=password)
-        self.all_layers = qgs_cat.get_layers()
+        # QtCore.pyqtRemoveInputHook()
+        # import pdb; pdb.set_trace()
+        QtGui.QApplication.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
+        progress = QtGui.QProgressDialog("Loading the layer list", "Cancel", 0, 0, self.tableView)
+        progress.setWindowModality(QtCore.Qt.WindowModal)
+        progress.resize(400, 110)
+        progress.setWindowTitle("Loading")
+        progress.show()
+
+        self.all_layers = qgs_cat.get_layers_from_capabilities()
+
+        QtGui.QApplication.restoreOverrideCursor()
+        progress.hide()
+
         self.model = QGSLayerModel(self.all_layers)
 
         self.tableView.setModel(self.model)
-        self.resizeColumns()
         self.tableView.setSortingEnabled(True)
+        self.resizeColumns()
 
     def downloadSelectedLayers(self):
         downloaded_layers = []
         selected_indexes = self.tableView.selectionModel().selection().indexes()
+
+        QtGui.QApplication.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
+        progress = QtGui.QProgressDialog("Downloading the selected layer_list", "Cancel", 0, 0, self.tableView)
+        progress.setWindowModality(QtCore.Qt.WindowModal)
+        progress.resize(400, 110)
+        progress.setWindowTitle("Loading")
+        progress.show()
+
         for index in selected_indexes:
             if index.column() != QGSLayerModel.NAME:
                 continue
@@ -80,6 +102,10 @@ class DownloadDialog(QtGui.QDialog):
             selected_layer = self.all_layers[selected_layer_name]
             selected_layer.download()
             downloaded_layers.append(selected_layer)
+
+        QtGui.QApplication.restoreOverrideCursor()
+        progress.hide()
+
         return downloaded_layers
 
     def AddLayers(self, layer_list):
