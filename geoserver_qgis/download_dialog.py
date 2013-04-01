@@ -89,7 +89,7 @@ class DownloadDialog(QtGui.QDialog):
         selected_indexes = self.tableView.selectionModel().selection().indexes()
 
         QtGui.QApplication.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
-        progress = QtGui.QProgressDialog("Downloading the selected layer_list", "Cancel", 0, 0, self.tableView)
+        progress = QtGui.QProgressDialog("Downloading the selected layer list", "Cancel", 0, 0, self.tableView)
         progress.setWindowModality(QtCore.Qt.WindowModal)
         progress.resize(400, 110)
         progress.setWindowTitle("Loading")

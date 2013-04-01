@@ -22,7 +22,7 @@ from PyQt4.QtCore import (QObject,
                           QCoreApplication,
                           QSettings)
 from PyQt4.QtGui import QAction, QIcon
-from geoserver_qgis import resources
+import resources
 from qgis.core import *
 
 # Import the code for the dialog
