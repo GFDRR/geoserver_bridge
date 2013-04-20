@@ -56,7 +56,7 @@ class Plugin:
         # Create action for Download dialog
         #------------------------------------
         self.actionDownloadDialog = QAction(
-            QIcon(":/plugins/geoserver_bridge/icon.png"),
+            QIcon(":/plugins/geoserver_bridge/download_icon.png"),
             u"Geoserver Bridge Download", self.iface.mainWindow())
 
         QObject.connect(self.actionDownloadDialog, SIGNAL("triggered()"), self.showDownloadDialog)
@@ -69,7 +69,7 @@ class Plugin:
         # Create action for Upload dialog
         #------------------------------------
         self.actionUploadDialog = QAction(
-            QIcon(":/plugins/geoserver_bridge/icon.png"),
+            QIcon(":/plugins/geoserver_bridge/upload_icon.png"),
             u"Geoserver Bridge Upload", self.iface.mainWindow())
 
         QObject.connect(self.actionUploadDialog, SIGNAL("triggered()"), self.showUploadDialog)
