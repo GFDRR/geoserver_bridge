@@ -44,7 +44,7 @@ class DownloadDialog(QtGui.QDialog):
         #Set up the table view
         #TODO: use a tree view that is folded on the workspace names
         self.tableView = self.ui.layerTreeView
-
+        self.tableView.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
         #Set up the button
         myButton = self.ui.pbnDownload
         QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),

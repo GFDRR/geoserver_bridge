@@ -50,6 +50,7 @@ class UploadDialog(QtGui.QDialog):
         #self.tableView.setSortingEnabled(True)
 
         self.tableWidget = self.ui.layerTableWidget
+        self.tableWidget.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
         self.populateLayerTable()
 
     def populateLayerTable(self):

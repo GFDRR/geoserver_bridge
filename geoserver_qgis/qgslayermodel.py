@@ -18,8 +18,6 @@ class QGSLayerModel(QAbstractTableModel):
                                     keywords, lyr.abstract])
 
     def sort(self, column, order):
-        # pyqtRemoveInputHook()
-        # import pdb; pdb.set_trace()
         self.layer_list = sorted(self.layer_list,
                                  key=itemgetter(column))
         if order == Qt.DescendingOrder:
