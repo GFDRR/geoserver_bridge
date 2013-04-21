@@ -25,7 +25,7 @@ log.addHandler(NullHandler())
 class QGSLayer(Layer):
     """Class to add some handy attributes and methods the gs_config layer.
     Could be added in gsconfig.py later on"""
-    def __init__(self, catalog, name, workspace, title, abstract, keywords):
+    def __init__(self, catalog, name, workspace, title='', abstract='', keywords=''):
         super(QGSLayer, self).__init__(catalog, name)
         # self.workspace = self.resource.workspace.name
         # self.typename = "%s:%s" % (self.resource.workspace.name, self.resource.name)

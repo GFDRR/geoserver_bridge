@@ -12,27 +12,26 @@ class QGSCatalog(Catalog):
     def __init__(self, *args, **kwargs):
         super(QGSCatalog, self).__init__(*args, **kwargs)
         self.gs_base_url = self.service_url.rstrip("rest")
-        #self.gs_catalog = Catalog(*args, **kwargs)
 
-    def get_layers(self, resource=None):
-        """Get the list of layers from a GeoServer Catalog with some basic metadata
+    # def get_layers(self, resource=None):
+    #     """Get the list of layers from a GeoServer Catalog with some basic metadata
 
-        Return a dictionary of QGSlayers the with layer name as a key"""
+    #     Return a dictionary of QGSlayers the with layer name as a key"""
 
-        if isinstance(resource, basestring):
-            resource = self.get_resources(resource)
-        layers_url = url(self.service_url, ["layers.xml"])
-        description = self.get_xml(layers_url)
-        lyrs = [QGSLayer(self, l.find("name").text) for l in description.findall("layer")]
-        if resource is not None:
-                lyrs = [l for l in lyrs if l.resource.hrf == resource.href]
-        #Transform the list of layers in a dictionnary of layers for ease of use later on
-        #In Python 3 use a dict comprehension instead: layers = {qgs_layer.name:layer for layer in all_layers}
-        layers = {}
-        for layer in lyrs:
-            name = layer.name
-            layers[name] = layer
-        return layers
+    #     if isinstance(resource, basestring):
+    #         resource = self.get_resources(resource)
+    #     layers_url = url(self.service_url, ["layers.xml"])
+    #     description = self.get_xml(layers_url)
+    #     lyrs = [QGSLayer(self, l.find("name").text) for l in description.findall("layer")]
+    #     if resource is not None:
+    #             lyrs = [l for l in lyrs if l.resource.hrf == resource.href]
+    #     #Transform the list of layers in a dictionnary of layers for ease of use later on
+    #     #In Python 3 use a dict comprehension instead: layers = {qgs_layer.name:layer for layer in all_layers}
+    #     layers = {}
+    #     for layer in lyrs:
+    #         name = layer.name
+    #         layers[name] = layer
+    #     return layers
 
     def get_layers_from_capabilities(self):
 
@@ -42,7 +41,7 @@ class QGSCatalog(Catalog):
         })
 
         r = requests.get(wms_getcap_url)
-        #                 auth=('dmc', 'dmc@123'))
+        #                 auth=('xxx', 'xxxxxx'))
         doc = etree.fromstring(r.content)
         capability = doc.find('Capability')
         svr = capability.find('Layer')

@@ -26,8 +26,8 @@ def export(layer):
     pass
 
 
-def upload_layer_to_gs(catalog, layer_name, base_file, overwrite=True, title=None,
-         abstract=None, permissions=None, keywords=()):
+def upload_layer_to_gs(catalog, layer_name, base_file, workspace=None, overwrite=True, title=None,
+                       abstract=None, permissions=None, keywords=()):
     """Upload layer data to Geoserver.
 
        If specified, the layer given is overwritten, otherwise a new layer
@@ -99,6 +99,7 @@ def upload_layer_to_gs(catalog, layer_name, base_file, overwrite=True, title=Non
         store, gs_resource = create_store_and_resource(catalog,
                                                        name,
                                                        data,
+                                                       workspace=workspace,
                                                        overwrite=overwrite)
     except geoserver.catalog.UploadError, e:
         msg = ('Could not save the layer %s, there was an upload '
@@ -129,7 +130,7 @@ def upload_layer_to_gs(catalog, layer_name, base_file, overwrite=True, title=Non
     if gs_resource is not None:
         assert gs_resource.name == name
     else:
-        msg = ('GeoNode encounterd problems when creating layer %s.'
+        msg = ('The QGS Bridge encounterd problems when creating layer %s.'
                'It cannot find the Layer that matches this Workspace.'
                'try renaming your files.' % name)
         #logger.warn(msg)
@@ -186,7 +187,7 @@ def upload_layer_to_gs(catalog, layer_name, base_file, overwrite=True, title=Non
         publishing.default_style = catalog.get_style(name)
         catalog.save(publishing)
 
-    new_layer = QGSLayer(catalog, layer_name)
+    new_layer = QGSLayer(catalog, layer_name, workspace)
 
     return new_layer
 
@@ -206,15 +207,15 @@ def layer_type(filename):
         raise Exception(msg)
 
 
-def create_featurestore(cat, name, data, overwrite):
+def create_featurestore(cat, name, data, workspace, overwrite):
     #cat = Layer.objects.gs_catalog
-    cat.create_featurestore(name, data, overwrite=overwrite)
+    cat.create_featurestore(name, data, workspace=workspace, overwrite=overwrite)
     return cat.get_store(name), cat.get_resource(name)
 
 
-def create_coveragestore(cat, name, data, overwrite):
+def create_coveragestore(cat, name, data, workspace, overwrite):
     #cat = Layer.objects.gs_catalog
-    cat.create_coveragestore(name, data, overwrite=overwrite)
+    cat.create_coveragestore(name, data, workspace=workspace, overwrite=overwrite)
     return cat.get_store(name), cat.get_resource(name)
 
 

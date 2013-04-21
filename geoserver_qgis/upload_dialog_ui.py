@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'upload_dialog_ui.ui'
 #
-# Created: Sun Feb  3 13:58:59 2013
-#      by: PyQt4 UI code generator 4.9.3
+# Created: Sat Apr 20 16:51:15 2013
+#      by: PyQt4 UI code generator 4.9.4
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -23,9 +23,11 @@ class Ui_UploadDialog(object):
         self.pbnUpload = QtGui.QPushButton(UploadDialog)
         self.pbnUpload.setObjectName(_fromUtf8("pbnUpload"))
         self.gridLayout.addWidget(self.pbnUpload, 1, 0, 1, 1)
-        self.layerTableView = QtGui.QTableView(UploadDialog)
-        self.layerTableView.setObjectName(_fromUtf8("layerTableView"))
-        self.gridLayout.addWidget(self.layerTableView, 0, 0, 1, 1)
+        self.layerTableWidget = QtGui.QTableWidget(UploadDialog)
+        self.layerTableWidget.setObjectName(_fromUtf8("layerTableWidget"))
+        self.layerTableWidget.setColumnCount(0)
+        self.layerTableWidget.setRowCount(0)
+        self.gridLayout.addWidget(self.layerTableWidget, 0, 0, 1, 1)
 
         self.retranslateUi(UploadDialog)
         QtCore.QMetaObject.connectSlotsByName(UploadDialog)
