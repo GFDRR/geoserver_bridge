@@ -1,3 +1,6 @@
+This plugin is DEPRECATED. All active development is done at: https://github.com/boundlessgeo/suite-qgis-plugin Please use this new plugin and repository instead. 
+
+
 geoserver-qgis
 ============
 
